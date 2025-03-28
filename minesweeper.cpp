@@ -1,12 +1,11 @@
 #include <iostream>
-
 #include <ctime>
 
 using std::cout;
-
 using std::cin;
 
-void vypispole(char hraciPole[10][10]);
+void vypispole(char hraciPole[10][10], bool debug, bool hratelnost);
+
 
 int main()
 
@@ -14,6 +13,8 @@ int main()
 
     srand(time(NULL));
 
+    bool debug = false;
+    bool hratelnost = true;
 
     char hraciPole[10][10] = {};
 
@@ -23,7 +24,6 @@ int main()
 
     int pocetMinOkolo = 0;
 
-    bool hratelnost = true;
 
     int vstupY = 0;
 
@@ -37,15 +37,8 @@ int main()
         for (int j = 0; j < 10; j++)
 
         {
-
             hraciPole[i][j] = '#';
-
-            std::cout << hraciPole[i][j];
-
         }
-
-        std::cout << std::endl;
-
     }
 
 
@@ -76,25 +69,25 @@ int main()
         }
 
     }
+    
+    vypispole(hraciPole, debug, hratelnost);
 
     while (hratelnost) {
 
+
+        
         pocetMinOkolo = 0;
 
         cout << "Zadejte hodnotu X: ";
 
         cin >> vstupX;
-
         std::cin.clear();
-
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         cout << "\nZadejte hodnotu Y: ";
 
         cin >> vstupY;
-
         std::cin.clear();
-
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         if (vstupX < 0 || vstupX > 9)
@@ -120,9 +113,11 @@ int main()
         if (hraciPole[vstupX][vstupY] == 'X')
 
         {
-
-            cout << "Hra skoncila, stoupl jsi na minu.";
-
+            system("cls");
+            cout << "Hra skoncila, stoupl jsi na minu.\n";
+            cout << "Zadal jsi X: " << vstupX << "; Y: " << vstupY << " Kde se nachazela mina. \n\n";
+            hratelnost = false;
+            vypispole(hraciPole, debug, hratelnost);
             return(0);
 
 
@@ -133,30 +128,31 @@ int main()
         {
 
 
-            for (int i = vstupY - 1; i < vstupY + 1; i++)
+            for (int i = vstupY - 1; i <= vstupY + 1; i++)
 
             {
 
-                for (int j = vstupX - 1; j < vstupX + 1; j++)
+                for (int j = vstupX - 1; j <= vstupX + 1; j++)
 
                 {
 
-                    if (hraciPole[j][i] == 'X')
-
+                    if (i >= 0 && i <= 9 && j >= 0 && j <= 9)
                     {
 
-                        pocetMinOkolo++;
+                        if (hraciPole[j][i] == 'X') {
+                        
+                            pocetMinOkolo++;
 
+                        }
                     }
-
 
                 }
 
             }
 
             hraciPole[vstupX][vstupY] = pocetMinOkolo + '0';  // Převedení čísla na odpovídající znak ASCII
-
-            vypispole(hraciPole);
+            system("cls");
+            vypispole(hraciPole, debug, hratelnost);
 
         }
 
@@ -164,36 +160,60 @@ int main()
 
 }
 
-void vypispole(char hraciPole[10][10]) {
+void vypispole(char hraciPole[10][10], bool debug, bool hratelnost) {
+
+    cout << "    0 1 2 3 4 5 6 7 8 9 Y\n";
+    cout << "  " <<  (char)218 << "--------------------\n";
 
     for (int i = 0; i < 10; i++)
 
     {
 
-        for (int j = 0; j < 10; j++)
+            cout << i << " | ";
+        
 
-        {
-
-            if (hraciPole[i][j] == 'X')
-
-            {
-
-                cout << "#";
-
-            }
-
-            else
+            for (int j = 0; j < 10; j++)
 
             {
 
-                cout << hraciPole[i][j];
+                if ( hratelnost == true)
+                {
+                    if (hraciPole[i][j] == 'X' && debug == true)
+                    {
+
+                        cout << hraciPole[i][j] << " ";
+                        continue;
+
+                    }
+
+                    if (hraciPole[i][j] == 'X')
+
+                    {
+
+                        cout << "# ";
+
+                    }
+
+                    else
+
+                    {
+
+                        cout << hraciPole[i][j] << " ";
+
+                    }
+
+                }
+
+                else
+                {
+                    cout << hraciPole[i][j] << " ";
+                }
+
 
             }
-
-        }
-
-        cout << std::endl;
-
+            
+            cout << std::endl;
     }
 
+    cout << "X\n\n";
 }
