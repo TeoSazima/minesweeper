@@ -197,6 +197,3 @@ void vypispole(char hraciPole[10][10]) {
     }
 
 }
-
-
-MINES GAME
