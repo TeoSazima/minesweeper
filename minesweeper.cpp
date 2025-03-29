@@ -5,6 +5,7 @@ using std::cout;
 using std::cin;
 
 void vypispole(char hraciPole[10][10], bool debug, bool hratelnost);
+void uvodniText();
 
 
 int main()
@@ -24,9 +25,10 @@ int main()
 
     int pocetMinOkolo = 0;
 
+    std::string vstupKontrolaVlajky = "0";
+    bool pozadavekNaOznaceniVlajka = false;
 
     int vstupY = 0;
-
     int vstupX = 0;
 
 
@@ -69,7 +71,7 @@ int main()
         }
 
     }
-    
+    uvodniText();
     vypispole(hraciPole, debug, hratelnost);
 
     while (hratelnost) {
@@ -80,33 +82,66 @@ int main()
 
         cout << "Zadejte hodnotu X: ";
 
-        cin >> vstupX;
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin >> vstupKontrolaVlajky;
+        if (vstupKontrolaVlajky[0] == 'V' || vstupKontrolaVlajky[0] == 'F')
+        {
+
+            pozadavekNaOznaceniVlajka = true;
+            vstupX = vstupKontrolaVlajky[1] - '0';
+
+        }
+        else
+        {
+            vstupX = vstupKontrolaVlajky[0] - '0';
+        }
+        //std::cin.clear();
+        //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         cout << "\nZadejte hodnotu Y: ";
 
-        cin >> vstupY;
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin >> vstupKontrolaVlajky;
+        if (vstupKontrolaVlajky[0] == 'V' || vstupKontrolaVlajky[0] == 'F')
+        {
 
-        if (vstupX < 0 || vstupX > 9)
+            pozadavekNaOznaceniVlajka = true;
+            vstupY = vstupKontrolaVlajky[1] - '0';
+
+        }
+        else
+        {
+            vstupY = vstupKontrolaVlajky[0] - '0';
+        }
+        
+        //std::cin.clear();
+        //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        if (vstupX < 0 || vstupX > 9 || vstupY < 0 || vstupY > 9)
 
         {
 
-            cout << "zadali jste neplatnou hodnotu X\n";
-
+            cout << "zadali jste neplatnou hodnotu\n";
+            pozadavekNaOznaceniVlajka = false;
             continue;
 
         }
 
-        if (vstupY < 0 || vstupY > 9)
-
+        
+        if (pozadavekNaOznaceniVlajka == true)
         {
 
-            cout << "zadali jste neplatnou hodnotu Y\n";
+            if (hraciPole[vstupX][vstupY] == 'X')
+            {
 
-            continue;
+                hraciPole[vstupX][vstupY] = 1; // Pokud hrac umistil vlajecku na minu nastavi se pole na minu
+
+
+            }
+            else
+            {
+                hraciPole[vstupX][vstupY] = 2; // 2 Znamena ze hrac umistil vlajecku na spatne pole
+                
+
+            }
 
         }
 
@@ -117,46 +152,78 @@ int main()
             cout << "Hra skoncila, stoupl jsi na minu.\n";
             cout << "Zadal jsi X: " << vstupX << "; Y: " << vstupY << " Kde se nachazela mina. \n\n";
             hratelnost = false;
-            vypispole(hraciPole, debug, hratelnost);
+            vypispole(hraciPole, true, false);
             return(0);
 
 
         }
 
-        else
+        else {
 
-        {
+            if (pozadavekNaOznaceniVlajka == false) {
 
+                for (int i = vstupY - 1; i <= vstupY + 1; i++) {
 
-            for (int i = vstupY - 1; i <= vstupY + 1; i++)
+                
 
-            {
+                    for (int j = vstupX - 1; j <= vstupX + 1; j++) {
 
-                for (int j = vstupX - 1; j <= vstupX + 1; j++)
+                    
 
-                {
-
-                    if (i >= 0 && i <= 9 && j >= 0 && j <= 9)
-                    {
-
-                        if (hraciPole[j][i] == 'X') {
+                        if (i >= 0 && i <= 9 && j >= 0 && j <= 9) {
                         
-                            pocetMinOkolo++;
+
+                            if (hraciPole[j][i] == 'X' || hraciPole[j][i] == '1' || hraciPole[j][i] == '2') {
+
+                                pocetMinOkolo++;
+                            }
 
                         }
                     }
-
                 }
 
+                hraciPole[vstupX][vstupY] = pocetMinOkolo + '0';
             }
+            else {
+               
+                
+                pozadavekNaOznaceniVlajka = false;
 
-            hraciPole[vstupX][vstupY] = pocetMinOkolo + '0';  // Převedení čísla na odpovídající znak ASCII
+            }
+        }
+
+
+
             system("cls");
             vypispole(hraciPole, debug, hratelnost);
 
-        }
+        
 
     }
+
+}
+void uvodniText() {
+
+    cout << R"(        _                                            
+  _ __ (_)_ _  ___ ____ __ _____ ___ _ __  ___ _ _ 
+ | '  \| | ' \/ -_|_-< V  V / -_) -_) '_ \/ -_) '_|
+ |_|_|_|_|_||_\___/__/\_/\_/\___\___| .__/\___|_|   
+                                    |_|            )" << std::endl;
+    cout << "\n---------------------------------------------------\n";
+
+    cout << "Vytejte ve hre minesweeper. Nize najdete pravidla a navod k pouziti:\n\n";
+
+    cout << "Pravidla:\n";
+    cout << "1) Cilem hry je najit vsechny miny a na zadnou neslapnout.\n";
+    cout << "2) Pokud slapnete na minu tak automaticky prohravate.\n\n";
+
+    cout << "Navod k pouziti:\n";
+    cout << "1) Pro zadani pole je potreba zvolitt souradne X, Y; ktere se nachazeji po stranach herniho pole.\n";
+    cout << "2) Pokud chcete oznacit pole Vlajkou (Domnivate se ze se pod pole nachazi mina), pridejte pred X souradnici pismeno F nebo V.\n";
+
+    cout << "\n---------------------------------------------------\n";
+    system("pause");
+    system("cls");
 
 }
 
@@ -178,6 +245,12 @@ void vypispole(char hraciPole[10][10], bool debug, bool hratelnost) {
 
                 if ( hratelnost == true)
                 {
+                    if (hraciPole[i][j] == 1 || hraciPole[i][j] == 2)
+                    {
+                        cout << "! ";
+                        continue;
+                    }   
+
                     if (hraciPole[i][j] == 'X' && debug == true)
                     {
 
