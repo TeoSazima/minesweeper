@@ -1,5 +1,7 @@
 #include <iostream>
 #include <ctime>
+#include <windows.h> // pro funkci SetConsoleTextAttribute
+
 
 using std::cout;
 using std::cin;
@@ -233,6 +235,8 @@ int main()
     }
 
 }
+
+
 void uvodniText() {
 
     cout << R"(        _                                            
@@ -259,6 +263,17 @@ void uvodniText() {
 
 }
 
+
+// Tuto funkci generoval Copilot a slouzi pouze pro zmenu barev
+
+void nastavBarvu(int barva) {
+    // Získáme handle pro konzoli
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    // Nastavíme barvu
+    SetConsoleTextAttribute(hConsole, barva);
+}
+
+
 void vypispole(char hraciPole[10][10], bool debug, bool hratelnost) {
 
     cout << "    0 1 2 3 4 5 6 7 8 9 Y\n";
@@ -275,13 +290,15 @@ void vypispole(char hraciPole[10][10], bool debug, bool hratelnost) {
 
             {
 
-                if ( hratelnost == true)
+                if (hratelnost == true)
                 {
                     if (hraciPole[i][j] == 'A' || hraciPole[i][j] == 'B')
                     {
+                        nastavBarvu(12); // Cervena
                         cout << "! ";
+                        nastavBarvu(7); // Bila
                         continue;
-                    }   
+                    }
 
                     if (hraciPole[i][j] == 'X' && debug == true)
                     {
@@ -303,18 +320,152 @@ void vypispole(char hraciPole[10][10], bool debug, bool hratelnost) {
 
                     {
 
-                        cout << hraciPole[i][j] << " ";
+                        if (hraciPole[i][j] == '0')
+                        {
+                            nastavBarvu(10); // Svetle zelena
+                            cout << hraciPole[i][j] << " ";
+                            nastavBarvu(7); // Bila
+                        }
+                        else if (hraciPole[i][j] == '1')
+                        {
+                            nastavBarvu(1); // Modra
+                            cout << hraciPole[i][j] << " ";
+                            nastavBarvu(7); // Bila
+                        }
+                        else if (hraciPole[i][j] == '2')
+                        {
+                            nastavBarvu(6); // Zelena
+                            cout << hraciPole[i][j] << " ";
+                            nastavBarvu(7); // Bila
+                        }
+                        else if (hraciPole[i][j] == '3')
+                        {
+                            nastavBarvu(4); // Cervena
+                            cout << hraciPole[i][j] << " ";
+                            nastavBarvu(7); // Bila
+                        }
+                        else if (hraciPole[i][j] == '4')
+                        {
+                            nastavBarvu(5); // Fialova
+                            cout << hraciPole[i][j] << " ";
+                            nastavBarvu(7); // Bila
+                        }
+                        else if (hraciPole[i][j] == '5')
+                        {
+                            nastavBarvu(6); // Zluta
+                            cout << hraciPole[i][j] << " ";
+                            nastavBarvu(7); // Bila
+                        }
+                        else if (hraciPole[i][j] == '6')
+                        {
+                            nastavBarvu(6); // Azurova
+                            cout << hraciPole[i][j] << " ";
+                            nastavBarvu(7); // Bila
+                        }
+                        else if (hraciPole[i][j] == '7')
+                        {
+                            nastavBarvu(9); // Svetle modra
+                            cout << hraciPole[i][j] << " ";
+                            nastavBarvu(7); // Bila
+                        }
+                        else if (hraciPole[i][j] == '8')
+                        {
+                            nastavBarvu(7); // Bila
+                            cout << hraciPole[i][j] << " ";
+                            
+                        }
+                        else
+                        {
+                            cout << hraciPole[i][j] << " ";
+                        }
+
+                        
 
                     }
 
-                }
 
+                }
                 else
                 {
-                    cout << hraciPole[i][j] << " ";
+
+                    if (hraciPole[i][j] == '0')
+                    {
+                        nastavBarvu(10); // Svetle zelena
+                        cout << hraciPole[i][j] << " ";
+                        nastavBarvu(7); // Bila
+                    }
+                    else if (hraciPole[i][j] == '1')
+                    {
+                        nastavBarvu(1); // Modra
+                        cout << hraciPole[i][j] << " ";
+                        nastavBarvu(7); // Bila
+                    }
+                    else if (hraciPole[i][j] == '2')
+                    {
+                        nastavBarvu(6); // Zelena
+                        cout << hraciPole[i][j] << " ";
+                        nastavBarvu(7); // Bila
+                    }
+                    else if (hraciPole[i][j] == '3')
+                    {
+                        nastavBarvu(4); // Cervena
+                        cout << hraciPole[i][j] << " ";
+                        nastavBarvu(7); // Bila
+                    }
+                    else if (hraciPole[i][j] == '4')
+                    {
+                        nastavBarvu(5); // Fialova
+                        cout << hraciPole[i][j] << " ";
+                        nastavBarvu(7); // Bila
+                    }
+                    else if (hraciPole[i][j] == '5')
+                    {
+                        nastavBarvu(6); // Zluta
+                        cout << hraciPole[i][j] << " ";
+                        nastavBarvu(7); // Bila
+                    }
+                    else if (hraciPole[i][j] == '6')
+                    {
+                        nastavBarvu(6); // Azurova
+                        cout << hraciPole[i][j] << " ";
+                        nastavBarvu(7); // Bila
+                    }
+                    else if (hraciPole[i][j] == '7')
+                    {
+                        nastavBarvu(9); // Svetle modra
+                        cout << hraciPole[i][j] << " ";
+                        nastavBarvu(7); // Bila
+                    }
+                    else if (hraciPole[i][j] == '8')
+                    {
+                        nastavBarvu(7); // Bila
+                        cout << hraciPole[i][j] << " ";
+
+                    }
+                    else if (hraciPole[i][j] == 'A')
+                    {
+                        nastavBarvu(12); // Cervena
+                        cout << "! ";
+                        nastavBarvu(7); // Bila
+                    }
+                    else if (hraciPole[i][j] == 'B')
+                    {
+
+                        cout << "# ";
+                      
+                    }
+                    else if (hraciPole[i][j] == 'X')
+                    {
+                        nastavBarvu(15); // Cervena
+                        cout << "X ";
+                        nastavBarvu(7); // Bila
+                    }
+                    else
+                    {
+                        cout << hraciPole[i][j] << " ";
+                    }
+
                 }
-
-
             }
             
             cout << std::endl;
