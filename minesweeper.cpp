@@ -8,29 +8,34 @@ using std::cin;
 
 void vypispole(char hraciPole[10][10], bool debug, bool hratelnost);
 void uvodniText();
-
+void odhalPole(char hraciPole[10][10], int x, int y);
+void KonecHryText();
+bool konecHryChecker(char HraciPole[10][10]);
 
 int main()
 
 {
 
+    
+
+
     srand(time(NULL));
 
-    bool debug = false;
+    bool debug = true;
     bool hratelnost = true;
+    bool konecHry = false;
 
     char hraciPole[10][10] = {};
 
     int miny_X = 0;
-
     int miny_Y = 0;
-
     int pocetMinOkolo = 0;
 
     std::string vstupKontrolaVlajky = "0";
     bool pozadavekNaOznaceniVlajka = false;
     bool pozadavekNaOdebraniVlajka = false;
 
+    int pocetmin = 25; //Zde se nastavuje pocet min
     int vstupY = 0;
     int vstupX = 0;
 
@@ -47,7 +52,7 @@ int main()
     }
 
 
-    for (int i = 0; i < 15; i++) //Zde se nastavuje pocet min 
+    for (int i = 0; i < pocetmin; i++)  
 
     {
 
@@ -144,6 +149,16 @@ int main()
                 pozadavekNaOdebraniVlajka = false;
                 system("cls");
                 vypispole(hraciPole, debug, hratelnost);
+                
+                if (konecHry == true)
+                {
+
+                    KonecHryText();
+                    return(0);
+                }
+                
+                konecHry = konecHryChecker(hraciPole);
+
                 continue;
 
 
@@ -155,7 +170,17 @@ int main()
                 hraciPole[vstupX][vstupY] = '#'; // Pokud hrac umistil vlajecku na minu nastavi se pole na minu
                 pozadavekNaOdebraniVlajka = false;
                 system("cls");
+               
+                konecHry = konecHryChecker(hraciPole);
+                if (konecHry == true)
+                {
+
+                    KonecHryText();
+                    return(0);
+                }
+                
                 vypispole(hraciPole, debug, hratelnost);
+                
                 continue;
 
 
@@ -225,10 +250,25 @@ int main()
             }
         }
 
+        if (hraciPole[vstupX][vstupY] == '0')
+        {
+
+            odhalPole(hraciPole, vstupX, vstupY);
+
+        }
 
 
-            system("cls");
-            vypispole(hraciPole, debug, hratelnost);
+        konecHry = konecHryChecker(hraciPole);
+        if (konecHry == true)
+        {
+
+            KonecHryText();
+            return(0);
+        }
+
+
+        system("cls");
+        vypispole(hraciPole, debug, hratelnost);
 
         
 
@@ -263,6 +303,42 @@ void uvodniText() {
 
 }
 
+void KonecHryText() {
+
+    system("cls");
+    cout << R"(        _                                            
+  _ __ (_)_ _  ___ ____ __ _____ ___ _ __  ___ _ _ 
+ | '  \| | ' \/ -_|_-< V  V / -_) -_) '_ \/ -_) '_|
+ |_|_|_|_|_||_\___/__/\_/\_/\___\___| .__/\___|_|   
+                                    |_|            )" << std::endl;
+    cout << "\n---------------------------------------------------\n";
+
+    cout << "Gratuluji dohral jsi moji hru\n";
+    cout << "Pokud ti hra prila priliz lehka, muzes si zvisit pocet min na radku: 38\n";
+    cout << "Naopak pokud ti hra prisla priliz sozita muzes si pocet min snizit\n";
+    
+    cout << "\n---------------------------------------------------\n";
+    
+    
+}
+
+
+bool konecHryChecker(char HraciPole[10][10]) {
+
+    for (int i = 0; i < 10; i++)
+    {
+        for (int j = 0; j < 10; j++)
+        {
+            if (HraciPole[i][j] == 'B' || HraciPole[i][j] == 'X')
+            {
+                return false;
+                break;
+            }
+        }
+    }
+
+    return true;
+}
 
 // Tuto funkci generoval Copilot a slouzi pouze pro zmenu barev
 
@@ -271,6 +347,12 @@ void nastavBarvu(int barva) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     // Nastavíme barvu
     SetConsoleTextAttribute(hConsole, barva);
+}
+
+void odhalPole(char hraciPole[10][10], int vstupX, int vstupY) {
+   
+
+
 }
 
 
